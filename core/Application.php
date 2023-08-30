@@ -6,11 +6,17 @@ use Dotenv\Dotenv;
 use Bayfront\HttpRequest\Request;
 use App\AppServiceProvider;
 use Core\Contracts\Config;
+use Core\Contracts\Container;
 use Core\Contracts\Router;
 use Core\Contracts\Template;
 
 class Application
 {
+    /**
+     * Container
+     */
+    public static Container $container;
+    
     /**
      * Config
      *
@@ -53,9 +59,9 @@ class Application
      * 
      * @return static 
      */
-    public static function make(...$args) : static
+    public static function make() : static
     {
-        return new static(...$args);
+        return new static();
     }
     
     public function addGlobalParam(string $key, $value) : self
@@ -145,6 +151,11 @@ class Application
     public function run() : void
     {
         $this->router->run();
+    }
+
+    public function __destruct() 
+    {
+        
     }
 
 }

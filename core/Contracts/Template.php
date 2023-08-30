@@ -4,7 +4,7 @@ namespace Core\Contracts;
 
 interface Template
 {
-    public static function make(...$args) : static;
+    public static function make() : static;
 
     public function setViewsDirectory(string $directory) : self;
 

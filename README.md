@@ -70,3 +70,5 @@ $this->get('/', function (){
 
 - Middleware
 - Models
+- Request
+- IoC Container

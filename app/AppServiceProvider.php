@@ -20,10 +20,10 @@ class AppServiceProvider
         include_once('helpers.php');
     }
 
-    public function addGlobalParams()
-    {
-        $this->application
-            ->addGlobalParam('foo', 'var')
-            ->addGlobalParam('yo', 'wat');
-    }
+    // public function addGlobalParams()
+    // {
+    //     $this->application
+    //         ->addGlobalParam('foo', 'var')
+    //         ->addGlobalParam('yo', 'wat');
+    // }
 }

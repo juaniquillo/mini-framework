@@ -12,16 +12,17 @@ class MainTemplate implements Template
 
     protected Engine $engine;
     
+    /**
+     * @return self
+     */
     public function __construct()
     {
         $this->engine = new Engine();
-        
-        return $this;
     }
 
-    public static function make(...$args) : static
+    public static function make() : static
     {
-        return new static(...$args);
+        return new static();
     }
 
     public function setViewsDirectory(string $directory) : self
@@ -56,7 +57,7 @@ class MainTemplate implements Template
      * @param string $key
      * @param mixed $value
      * 
-     * @return void
+     * @return self
      */
     public function setAdditionalParam(string $key, $value)
     {
