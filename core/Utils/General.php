@@ -2,12 +2,16 @@
 
 namespace Core\Utils;
 
+use Closure;
+
 /**
  * Helper class that provides easy access to useful common php functions.
  *
  * Class Util
  *
  * @package CNZ\Helpers
+ * 
+ * @source https://github.com/clausnz/php-helpers clausnz/php-helpers
  */
 class General
 {
@@ -227,5 +231,10 @@ class General
         } else {
             highlight_string("<?php\n" . var_export($var, true));
         }
+    }
+
+    public  static function include(Closure $include) : void
+    {
+        $include->bindTo(new static)();
     }
 }

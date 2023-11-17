@@ -1,15 +1,15 @@
 <?php
 
-use Core\MainRouter;
+use Core\Application;
 
-/** @var MainRouter $this */
-$this->get('/', function() { 
+$router = Application::resolve('router');
 
-    /** @var MainRouter $this */
-    $this->template->render('home', [
+$router->get('/', function() { 
+    
+    view('home', [
         'foo' => 'var',
-        /** @var MainRouter $this */
-        'title' => $this->config->get('title'),
+        /** @var Router $this */
+        'title' =>  config('title'),
     ]);
 
 });

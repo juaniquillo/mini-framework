@@ -2,7 +2,9 @@
 
 namespace Core;
 
-class MainIoContainer
+use Core\Contracts\Container;
+
+class MainContainer implements Container
 {
     private array $instances = [];
     
@@ -30,11 +32,20 @@ class MainIoContainer
     public function resolve(string $name) : object
     {
         if($this->isset($name)) {
+            
+            if(is_closure($name)) {
+                $this->bind($name());
+            }
+
             return $this->get($name);
         }
         
         if(!class_exists($name)) {
             throw new \Exception('Class could not be resolved', 500);
+        }
+
+        if(!class_exists($name)) {
+            throw new \Exception('The class '.$name.' does not exist', 500);
         }
 
         $instance = new $name;
@@ -62,7 +73,7 @@ class MainIoContainer
      * 
      * @return object|null
      */
-    public function get(string $name)
+    public function get(string $name) : object
     {
         return $this->instances[$name] ?? null;
     }

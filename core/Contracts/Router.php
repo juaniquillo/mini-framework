@@ -14,8 +14,6 @@ interface Router
 
     public function setRequest($request) : self;
 
-    public function includeRoutes(string $path) : void;
-
     public function get(string $route, Closure $closure) : self;
 
     public function post(string $route, Closure $closure) : self;

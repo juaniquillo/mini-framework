@@ -53,11 +53,6 @@ class MainRouter implements RouterContract
         return $this;
     }
 
-    public function includeRoutes(string $path) : void
-    {
-        include_once(realpath($path));
-    }
-
     public function get(string $route, Closure $closure) : self
     {
         

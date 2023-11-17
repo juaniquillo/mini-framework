@@ -13,7 +13,7 @@ interface Config
      */ 
     public function set(array $config) : self;
 
-    public function get($key) : mixed;
+    public function get($key, $default = null) : mixed;
 
     public function all() : array;
 }

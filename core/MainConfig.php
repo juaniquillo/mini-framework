@@ -29,14 +29,14 @@ class MainConfig implements Config
         return $this;
     }
 
-    public function get($key) : mixed
+    public function get($key, $default = null) : mixed
     {
         /**
          * For dot notation, ej. 'folder.subfolder'
          */
         $dot = new Dot($this->config);
         
-        return $dot->get($key);
+        return $dot->get($key, $default);
     }
 
     public function all() : array

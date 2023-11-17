@@ -3,34 +3,21 @@
 namespace Core;
 
 use Dotenv\Dotenv;
-use Bayfront\HttpRequest\Request;
-use App\AppServiceProvider;
-use Core\Contracts\Config;
-use Core\Contracts\Container;
+use Core\MainContainer;
 use Core\Contracts\Router;
+use App\AppServiceProvider;
 use Core\Contracts\Template;
+use Core\Contracts\Container;
+use Bayfront\HttpRequest\Request;
+use Core\Utils\General;
 
 class Application
 {
     /**
      * Container
      */
-    public static Container $container;
+    private static Container $container;
     
-    /**
-     * Config
-     *
-     * @var Config
-     */
-    protected Config $config;
-
-    /**
-     * Router
-     *
-     * @var Router
-     */
-    protected Router $router;
-
     /**
      * App service provider
      *
@@ -44,13 +31,6 @@ class Application
      * @var array
      */
     protected array $globalTemplateParams = [];
-
-    /**
-     * Template
-     *
-     * @var Template
-     */
-    protected Template $template;
 
     /**
      * Make
@@ -70,21 +50,12 @@ class Application
         
         return $this;
     }
-    
-    public function setTemplateEngine(Template $template) : self
-    {
-        $this->template = $template;
-        
-        return $this;
-    }
-    
-    public function setRouter(Router $router) : self
-    {
-        $this->router = $router;
-        
-        return $this;
-    }
 
+    public static function resolve(string $name) : object
+    {
+       return self::$container->resolve($name);
+    }
+  
     /**
      * Bootstraps all services
      *
@@ -93,10 +64,17 @@ class Application
     public function bootstrap() : self
     {
         /**
+         * Container
+         */
+        self::$container = new MainContainer();
+        
+        /**
          * Envs
          */
         $dotenv = Dotenv::createImmutable(__DIR__.'/../');
         $dotenv->load();
+
+        self::$container->bind($dotenv);
 
         /**
          * Helpers
@@ -109,35 +87,35 @@ class Application
         $defaults = include(realpath(__DIR__.'/Defaults/config-defaults.php'));
         $appConfig = include(realpath(__DIR__.'/../app/config.php'));
 
-        $this->config = MainConfig::make($defaults)
+        $config = MainConfig::make($defaults)
             ->set($appConfig);
        
         /**
          * Template Engine
          */
-        $this->template = MainTemplate::make();
+        $template = MainTemplate::make();
 
-        $this->template
+        $template
             ->setAdditionalParams($this->globalTemplateParams)
-            ->setViewsDirectory($this->config->get('views.directory'));
+            ->setViewsDirectory($config->get('views.directory'));
         
         /**
          * Router
          */
-        $this->router = MainRouter::make(
-            $this->config,
-            $this->template,
+        $router = MainRouter::make(
+            $config,
+            $template,
         );
+
         
         /**
          * Provider
          */
-        $this->appProvider = new AppServiceProvider($this);
+        // $this->appProvider = new AppServiceProvider($this);
 
-        /**
-         * Include routes
-         */
-        $this->router->includeRoutes(__DIR__.'/../app/routes.php');
+        self::$container->bind($config, 'config');
+        self::$container->bind($template, 'template');
+        self::$container->bind($router, 'router');
         
         return $this;
         
@@ -150,7 +128,11 @@ class Application
      */
     public function run() : void
     {
-        $this->router->run();
+        General::include(function(){
+            include(__DIR__.'/../app/routes.php');
+        });
+        
+        self::$container->resolve('router')->run();
     }
 
     public function __destruct() 
