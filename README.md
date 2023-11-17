@@ -35,10 +35,16 @@ You can add views inside the `resources\Views` folder.
 To render the view use the `template` and the `render` method inside a route's closure. The first parameter must be the name of view's file (without the `.php`) and the second parameter is an array with available arguments that will become available inside the view:
 
 ```php
-$this->get('/', function (){
+use Core\Application;
+
+$router = Application::resolve('router');
+
+$router->get('/', function() { 
     
-    $this->template->render('home', [
-        'fo' => $bar,
+    view('home', [
+        'foo' => 'var',
+        /** @var Router $this */
+        'title' =>  config('title'),
     ]);
 
 });
