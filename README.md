@@ -13,8 +13,12 @@ For routes the package [bramus/router](https://github.com/bramus/router) is used
 Add routes in `app/routes.php` calling the verb method, with the path as a first parameter and a closure as a second parameter:
 
 ```php
-$this->get('/', function (){
-    // root
+use Core\Application;
+
+$router = Application::resolve('router');
+
+$router->get('/', function() { 
+    
 });
 ```
 
@@ -43,8 +47,6 @@ $router->get('/', function() {
     
     view('home', [
         'foo' => 'var',
-        /** @var Router $this */
-        'title' =>  config('title'),
     ]);
 
 });
