@@ -1,6 +1,6 @@
 # MiniFramework
 
-An exercise on who to make an MVC framework from (semi) scratch.
+An exercise on how to make an MVC framework from (not really) scratch.
 
 ## Environment
 
