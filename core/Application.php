@@ -74,7 +74,7 @@ class Application
         $dotenv = Dotenv::createImmutable(__DIR__.'/../');
         $dotenv->load();
 
-        self::$container->bind($dotenv);
+        self::$container->bind($dotenv, 'env');
 
         /**
          * Helpers

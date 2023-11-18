@@ -47,6 +47,16 @@ if (! function_exists('root_path')) {
 /**
  * Env
  */
+if (! function_exists('resolve')) {
+    function resolve($name)
+    {
+        return Application::resolve('config');
+    }
+}
+
+/**
+ * Env
+ */
 if (! function_exists('env')) {
     function env($key, $default = null)
     {
