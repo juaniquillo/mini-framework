@@ -5,7 +5,6 @@ namespace Core;
 use Bayfront\HttpRequest\Request;
 use Closure;
 use Bramus\Router\Router;
-use Core\Contracts\Config;
 use Core\Contracts\Router as RouterContract;
 use Core\Contracts\Template;
 
@@ -14,8 +13,6 @@ class MainRouter implements RouterContract
     protected $router;
     
     public function __construct(
-        protected Config $config,
-        protected Template $template,
         protected readonly Request $request = new Request,
     ) 
     {
@@ -25,20 +22,6 @@ class MainRouter implements RouterContract
     public static function make(...$args) : static
     {
         return new static(...$args);
-    }
-
-    public function setConfig(Config $config) : self
-    {
-        $this->config = $config;
-
-        return $this;
-    }
-    
-    public function setTemplate(Template $template) : self
-    {
-        $this->template = $template;
-
-        return $this;
     }
 
     /**
@@ -52,7 +35,7 @@ class MainRouter implements RouterContract
 
         return $this;
     }
-
+  
     public function get(string $route, Closure $closure) : self
     {
         
@@ -93,5 +76,23 @@ class MainRouter implements RouterContract
     {
         $this->router->run();
     }
+
+    public function set404(Closure $closure = null) : self
+    {
+        if($closure) {
+            $this->router->set404($closure);
+            return $this;
+        }
+        
+        $this->router->set404(function() {
+        
+            header('HTTP/1.1 404 Not Found');
+            
+            view('codes/404', []);
+        });
+        
+        return $this;
+    }
+
 }
 

@@ -1,3 +1,5 @@
+<?php /** @var \League\Plates\Template\Template $this */ ?>
+
 <?php $this->layout('layouts/template', [
     'title' => $title ?? null
 ]) ?>
@@ -12,6 +14,16 @@
 
     <div>
         <p><?= $this->e($foo) ?></p>
+    </div>
+
+    <div>
+        <?=$this->insert('components/form', [
+            'inputs' => $inputs ?? null,
+            'attributes' => [
+                'method' => 'post',
+                'action' => '/',
+            ],
+        ])?>
     </div>
     
 </section>

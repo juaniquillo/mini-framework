@@ -8,11 +8,9 @@ class AppServiceProvider
 {
     public function __construct(
         protected Application $application
-    ) 
-    {
+    ) {
         $this->register();
 
-        // $this->addGlobalParams();
     }
     
     protected function register()
@@ -20,10 +18,4 @@ class AppServiceProvider
         include_once('helpers.php');
     }
 
-    // public function addGlobalParams()
-    // {
-    //     $this->application
-    //         ->addGlobalParam('foo', 'var')
-    //         ->addGlobalParam('yo', 'wat');
-    // }
 }

@@ -9,6 +9,27 @@ use Core\Contracts\Router;
 use Core\Utils\General;
 
 /*
+ * Views
+ */
+if (! function_exists('inlineAttrs')) {
+    function inlineAttrs(array $attributes, $ignoreNullValue = false) : string
+    {
+        $inlineAttrs = '';
+
+        foreach ($attributes as $name => $value) {
+            
+            if ($ignoreNullValue && !$value) {
+                continue;
+            }
+            
+            $inlineAttrs .= "{$name}=\"{$value}\" ";
+        }
+
+        return $inlineAttrs;
+    }
+}
+
+/*
  * Output
  */
 if (! function_exists('dd')) {
@@ -17,6 +38,7 @@ if (! function_exists('dd')) {
         General::dd($var);
     }
 }
+
 if (! function_exists('dump')) {
     function dump($var)
     {

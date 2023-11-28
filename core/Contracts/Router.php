@@ -8,10 +8,6 @@ interface Router
 {
     public static function make(...$args) : static;
 
-    public function setConfig(Config $config) : self;
-    
-    public function setTemplate(Template $template) : self;
-
     public function setRequest($request) : self;
 
     public function get(string $route, Closure $closure) : self;
@@ -23,6 +19,8 @@ interface Router
     public function patch(string $route, Closure $closure) : self;
 
     public function delete(string $route, Closure $closure) : self;
+
+    public function set404(Closure $closure = null) : self;
 
     public function run() : void;
 

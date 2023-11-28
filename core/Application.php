@@ -35,8 +35,6 @@ class Application
     /**
      * Make
      *
-     * @param ...$args
-     * 
      * @return static 
      */
     public static function make() : static
@@ -50,6 +48,12 @@ class Application
         
         return $this;
     }
+
+    public static function bind(object $instance, $name = null) : void
+    {
+        self::$container->bind($instance, $name);
+    }
+  
 
     public static function resolve(string $name) : object
     {
@@ -74,8 +78,6 @@ class Application
         $dotenv = Dotenv::createImmutable(__DIR__.'/../');
         $dotenv->load();
 
-        self::$container->bind($dotenv, 'env');
-
         /**
          * Helpers
          */
@@ -93,29 +95,25 @@ class Application
         /**
          * Template Engine
          */
-        $template = MainTemplate::make();
-
-        $template
+        $template = MainTemplate::make()
             ->setAdditionalParams($this->globalTemplateParams)
             ->setViewsDirectory($config->get('views.directory'));
         
         /**
          * Router
          */
-        $router = MainRouter::make(
-            $config,
-            $template,
-        );
+        $router = MainRouter::make();
 
+        self::$container->bind($dotenv, 'env');
+        self::$container->bind($config, 'config');
+        self::$container->bind($template, 'template');
+        self::$container->bind($router, 'router');
         
         /**
          * Provider
          */
-        // $this->appProvider = new AppServiceProvider($this);
+        $this->appProvider = new AppServiceProvider($this);
 
-        self::$container->bind($config, 'config');
-        self::$container->bind($template, 'template');
-        self::$container->bind($router, 'router');
         
         return $this;
         
@@ -128,11 +126,16 @@ class Application
      */
     public function run() : void
     {
-        General::include(function(){
+        /** @var Router $router */
+        
+        $router = self::$container->resolve('router');
+
+        General::include(function() {
             include(__DIR__.'/../app/routes.php');
         });
-        
-        self::$container->resolve('router')->run();
+
+        $router->set404()
+            ->run();
     }
 
     public function __destruct() 
