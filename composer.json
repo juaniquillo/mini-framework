@@ -6,8 +6,7 @@
         "adbario/php-dot-notation": "^3.3",
         "vlucas/phpdotenv": "^5.5",
         "rakit/validation": "^1.4",
-        "bayfrontmedia/php-http-request": "^3.0",
-        "chatagency/crud-assistant": "^0.13.1"
+        "bayfrontmedia/php-http-request": "^3.0"
     },
     "autoload": {
         "psr-4": {

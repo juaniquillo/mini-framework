@@ -12,18 +12,9 @@
     
     <h2>Welcome</h2>
 
-    <div>
-        <p><?= $this->e($foo) ?></p>
-    </div>
 
     <div>
-        <?=$this->insert('components/form', [
-            'inputs' => $inputs ?? null,
-            'attributes' => [
-                'method' => 'post',
-                'action' => '/',
-            ],
-        ])?>
+        This is a view
     </div>
     
 </section>
